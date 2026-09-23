@@ -178,48 +178,6 @@ svg{display:block}
   max-width:62rem;margin-inline:auto;line-height:1.65}
 .band--blue .note,.band--bright .note{color:var(--on-blue-mute)}
 
-/* ── architecture (slide 11) — all selectors namespaced .aab- ───────── */
-.aab-arch{
-  --aab-blue:var(--blue-bright); --aab-blue-deep:var(--blue);
-  --aab-blue-soft:#EAF2FE; --aab-blue-line:var(--line);
-  --aab-ink:var(--ink); --aab-muted:var(--muted);
-  --aab-bg:var(--grey); --aab-card:var(--paper); --aab-block:#C0392B;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .aab-arch{
-  --aab-blue-soft:#10243E; --aab-block:#E0705F;}}
-:root[data-theme="dark"] .aab-arch{--aab-blue-soft:#10243E; --aab-block:#E0705F}
-.aab-arch{background:var(--aab-bg)}
-.aab-diagram{display:grid;gap:14px}
-.aab-zone{border:1px solid var(--aab-blue-line);border-radius:var(--radius);
-  padding:20px;background:var(--aab-card)}
-.aab-zone--iso{border:2px solid var(--aab-blue);background:var(--aab-blue-soft)}
-.aab-zone--blocked{border-style:dashed;border-color:var(--aab-block);
-  background:transparent;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.aab-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--aab-muted);margin-bottom:14px}
-.aab-zone--iso .aab-label{color:var(--aab-blue)}
-.aab-zone--blocked .aab-label{margin:0;color:var(--aab-block)}
-.aab-blocked-note{font-size:.9rem;color:var(--aab-block);font-weight:600;margin:0}
-.aab-x{width:24px;height:24px;flex:none;color:var(--aab-block)}
-.aab-nodes{display:grid;gap:10px;grid-template-columns:repeat(4,1fr)}
-.aab-node{background:var(--aab-card);border:1px solid var(--aab-blue-line);
-  border-radius:var(--radius-btn);padding:12px 14px;font-size:.88rem;font-weight:600;
-  color:var(--aab-ink);line-height:1.4}
-.aab-node span{display:block;font-weight:400;color:var(--aab-muted);font-size:.8rem;margin-top:3px}
-.aab-zone--iso .aab-node{border-color:rgba(0,116,255,.28)}
-.aab-boxname{font-size:1.02rem;font-weight:700;color:var(--aab-ink);margin-bottom:14px}
-.aab-flow{display:flex;align-items:center;justify-content:center;gap:10px;
-  font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--aab-muted)}
-.aab-flow::before,.aab-flow::after{content:"";height:1px;width:38px;background:var(--aab-blue-line)}
-.aab-split{display:grid;gap:14px;grid-template-columns:1fr 1fr}
-.aab-foot{font-size:.86rem;color:var(--aab-muted);text-align:center;margin-top:22px}
-@media(max-width:960px){
-  .aab-nodes{grid-template-columns:repeat(2,1fr)}
-  .aab-split{grid-template-columns:1fr}
-}
-@media(max-width:560px){.aab-nodes{grid-template-columns:1fr}}
-
 /* contact */
 .contact-box{background:var(--grey);border-radius:var(--radius);padding:clamp(26px,3.5vw,44px)}
 .form-grid{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
@@ -413,77 +371,214 @@ footer{border-top:1px solid var(--line);padding-block:26px;font-size:.84rem;
   </div>
 </section>
 
-<!-- ══ ARCHITECTURE ══ -->
-<section class="band aab-arch" id="architecture">
-  <div class="wrap">
-    <div class="head">
-      <h2>How it fits your network</h2>
-      <p>The box is deployed inside your own environment. Nothing it does at inference time
-        reaches the public internet.</p>
-    </div>
+<style>
+.aab-arch {
+  --aab-blue: #0074FF;
+  --aab-blue-deep: #0251B2;
+  --aab-blue-soft: #E8F1FD;
+  --aab-blue-line: #E2E2E6;
+  --aab-ink: #2B2B2B;
+  --aab-muted: #767676;
+  --aab-bg: #F8F8F8;
+  --aab-card: #FFFFFF;
+  --aab-block: #E11D48;
 
-    <div class="aab-diagram">
-      <div class="aab-zone aab-zone--blocked">
-        <svg class="aab-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 8.5 7 7M15.5 8.5l-7 7"/></svg>
-        <div>
-          <p class="aab-label">Public internet · SaaS LLM APIs</p>
-          <p class="aab-blocked-note">Blocked. No direct egress from the AI Automation Box.</p>
-        </div>
+  background: var(--aab-bg);
+  color: var(--aab-ink);
+  padding: 64px 20px;
+  font-family: inherit;
+}
+.aab-arch * { box-sizing: border-box; }
+.aab-wrap { max-width: 1180px; margin: 0 auto; }
+
+.aab-eyebrow {
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--aab-blue); font-weight: 700; margin: 0 0 10px;
+}
+.aab-h2 { font-size: clamp(26px, 3.4vw, 40px); line-height: 1.15; margin: 0 0 12px; font-weight: 700; }
+.aab-lede { font-size: clamp(15px, 1.5vw, 18px); color: var(--aab-muted); max-width: 740px; margin: 0 0 40px; line-height: 1.6; }
+
+/* three column frame: people, the box, internal systems */
+.aab-grid { display: grid; grid-template-columns: 0.85fr 2fr 0.85fr; gap: 18px; align-items: stretch; }
+
+.aab-panel {
+  background: var(--aab-card); border: 1px solid var(--aab-blue-line);
+  border-radius: 14px; padding: 20px;
+}
+.aab-panel-title {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.4px;
+  text-transform: uppercase; color: var(--aab-blue); margin: 0 0 4px;
+}
+.aab-panel-sub { font-size: 12.5px; color: var(--aab-muted); margin: 0 0 16px; line-height: 1.5; }
+
+.aab-item {
+  border: 1px solid var(--aab-blue-line); border-radius: 10px;
+  padding: 11px 13px; margin-bottom: 9px; background: var(--aab-card);
+  font-size: 13.5px; line-height: 1.4;
+}
+.aab-item:last-child { margin-bottom: 0; }
+.aab-item b { display: block; font-weight: 700; }
+.aab-item span { color: var(--aab-muted); font-size: 12px; }
+
+/* the isolated zone */
+.aab-zone {
+  border: 2px dashed var(--aab-blue); border-radius: 16px;
+  padding: 14px; background: var(--aab-blue-soft);
+  display: flex; flex-direction: column;
+}
+.aab-zone-tag {
+  display: inline-flex; align-items: center; gap: 7px; align-self: flex-start;
+  background: var(--aab-blue); color: #fff; font-size: 11px; font-weight: 700;
+  letter-spacing: 1.2px; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 999px; margin-bottom: 12px;
+}
+.aab-box {
+  background: var(--aab-card); border: 1px solid var(--aab-blue-line);
+  border-radius: 12px; padding: 18px; flex: 1;
+}
+.aab-box-title { font-size: 16px; font-weight: 700; margin: 0 0 2px; text-align: center; }
+.aab-box-sub { font-size: 12px; color: var(--aab-muted); margin: 0 0 16px; text-align: center; }
+
+.aab-layer-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--aab-muted); margin: 0 0 8px;
+}
+.aab-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-bottom: 16px; }
+.aab-tile {
+  background: var(--aab-blue); color: #fff; border-radius: 9px;
+  padding: 11px 9px; font-size: 12.5px; font-weight: 600; text-align: center; line-height: 1.3;
+}
+.aab-tile.aab-alt { background: var(--aab-blue-soft); color: var(--aab-blue-deep); border: 1px solid var(--aab-blue-line); }
+
+.aab-bar {
+  background: var(--aab-blue-deep); color: #fff; border-radius: 9px;
+  padding: 10px; text-align: center; font-size: 12.5px; font-weight: 600; margin-bottom: 16px;
+}
+.aab-foot-note { font-size: 11.5px; color: var(--aab-muted); text-align: center; margin: 0; line-height: 1.5; }
+
+/* blocked egress strip */
+.aab-blocked {
+  display: flex; align-items: center; gap: 12px;
+  border: 1px solid #F3C7D1; background: #FFF5F7; color: #7A1028;
+  border-radius: 12px; padding: 14px 18px; margin-top: 18px; font-size: 13.5px; line-height: 1.45;
+}
+.aab-blocked .aab-x {
+  flex: none; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--aab-block); color: #fff; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+}
+.aab-blocked b { color: #7A1028; }
+
+/* management plane */
+.aab-mgmt { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 18px; }
+
+.aab-legend { margin-top: 26px; font-size: 12px; color: var(--aab-muted); line-height: 1.6; }
+
+@media (max-width: 960px) {
+  .aab-grid { grid-template-columns: 1fr; }
+  .aab-tiles { grid-template-columns: repeat(2, 1fr); }
+  .aab-mgmt { grid-template-columns: 1fr; }
+  .aab-arch { padding: 44px 16px; }
+}
+</style>
+
+<section class="aab-arch" id="architecture" aria-labelledby="aab-arch-title">
+  <div class="aab-wrap">
+
+    <p class="aab-eyebrow">High level architecture</p>
+    <h2 class="aab-h2" id="aab-arch-title">How the AI Automation Box fits your network</h2>
+    <p class="aab-lede">
+      Everything runs inside your own network. Your staff reach it over the office LAN,
+      it connects to the systems you already run, and it makes no calls to any public AI
+      service. A fully sealed air gap is available as an option.
+    </p>
+
+    <div class="aab-grid">
+
+      <!-- LEFT: the people -->
+      <div class="aab-panel">
+        <p class="aab-panel-title">Your people</p>
+        <p class="aab-panel-sub">Office LAN, site to site VPN or SD WAN for other offices, VPN for remote staff.</p>
+        <div class="aab-item"><b>Requesters</b><span>Ask, draft, summarise</span></div>
+        <div class="aab-item"><b>Approvers</b><span>Review and sign off</span></div>
+        <div class="aab-item"><b>Fulfillers</b><span>Act on the output</span></div>
+        <div class="aab-item"><b>Browser and mobile</b><span>No software to install</span></div>
       </div>
 
+      <!-- CENTRE: the isolated zone -->
       <div class="aab-zone">
-        <p class="aab-label">Enterprise users · office LAN</p>
-        <div class="aab-nodes">
-          <div class="aab-node">Requesters</div>
-          <div class="aab-node">Approvers</div>
-          <div class="aab-node">Fulfillers</div>
-          <div class="aab-node">Browser + mobile<span>client access</span></div>
+        <span class="aab-zone-tag">Isolated zone &nbsp;·&nbsp; air gap optional</span>
+
+        <div class="aab-box">
+          <p class="aab-box-title">AI Automation Box</p>
+          <p class="aab-box-sub">Containerised, running on hardware you own</p>
+
+          <p class="aab-layer-label">Platform</p>
+          <div class="aab-tiles">
+            <div class="aab-tile">Editor UI</div>
+            <div class="aab-tile">Agent orchestrator</div>
+            <div class="aab-tile">Execution logging</div>
+            <div class="aab-tile">Users and roles</div>
+          </div>
+
+          <div class="aab-bar">Container management</div>
+
+          <p class="aab-layer-label">Engine</p>
+          <div class="aab-tiles">
+            <div class="aab-tile aab-alt">LLM inference and models</div>
+            <div class="aab-tile aab-alt">Vector database</div>
+            <div class="aab-tile aab-alt">Relational database</div>
+            <div class="aab-tile aab-alt">Media generation</div>
+          </div>
+
+          <p class="aab-foot-note">
+            Runs on customer hardware. We assess the environment and recommend where it sits.
+          </p>
         </div>
       </div>
 
-      <p class="aab-flow">HTTPS · LAN</p>
-
-      <div class="aab-zone aab-zone--iso">
-        <p class="aab-label">Isolated zone · air-gap optional</p>
-        <p class="aab-boxname">AI Automation Box · containerised</p>
-        <div class="aab-nodes">
-          <div class="aab-node">Agent Orchestrator</div>
-          <div class="aab-node">Ollama + LLM</div>
-          <div class="aab-node">Vector DB</div>
-          <div class="aab-node">Relational DB</div>
-          <div class="aab-node">Media Generation</div>
-          <div class="aab-node">Editor UI</div>
-          <div class="aab-node">Exec Logging</div>
-          <div class="aab-node">Container Mgmt</div>
-        </div>
-      </div>
-
-      <div class="aab-split">
-        <div class="aab-zone">
-          <p class="aab-label">Integrates with internal systems · no internet required</p>
-          <div class="aab-nodes" style="grid-template-columns:repeat(2,1fr)">
-            <div class="aab-node">AD / LDAP<span>SSO</span></div>
-            <div class="aab-node">Internal<span>SMTP relay</span></div>
-            <div class="aab-node">File shares<span>/ NAS</span></div>
-            <div class="aab-node">Internal<span>APIs &amp; apps</span></div>
-          </div>
-        </div>
-        <div class="aab-zone">
-          <p class="aab-label">Controlled management &amp; updates</p>
-          <div class="aab-nodes" style="grid-template-columns:1fr">
-            <div class="aab-node">Admin jump host / bastion<span>Break-glass access only</span></div>
-            <div class="aab-node">SIEM / syslog forwarding<span>Logs to your enterprise SOC</span></div>
-            <div class="aab-node">Offline update repo<span>Models &amp; containers via one-way transfer</span></div>
-          </div>
-        </div>
+      <!-- RIGHT: internal systems -->
+      <div class="aab-panel">
+        <p class="aab-panel-title">Your systems</p>
+        <p class="aab-panel-sub">Connected over your LAN. No internet required.</p>
+        <div class="aab-item"><b>AD, LDAP and SSO</b><span>Role based access</span></div>
+        <div class="aab-item"><b>Internal SMTP relay</b><span>Sends from your mail system</span></div>
+        <div class="aab-item"><b>File shares and NAS</b><span>Reads the documents you already hold</span></div>
+        <div class="aab-item"><b>Internal APIs and apps</b><span>Triggers and updates your systems</span></div>
       </div>
     </div>
 
-    <p class="aab-foot">Runs on customer hardware. MyRepublic assesses and recommends the hosting
-      location.</p>
+    <!-- blocked egress -->
+    <div class="aab-blocked">
+      <span class="aab-x" aria-hidden="true">&times;</span>
+      <span><b>No direct egress to the public internet.</b> Zero external API calls at inference time.
+      Nothing is sent to a public AI service, and no model downloads itself.</span>
+    </div>
+
+    <!-- management plane -->
+    <div class="aab-mgmt">
+      <div class="aab-panel">
+        <p class="aab-panel-title">Controlled access</p>
+        <p class="aab-panel-sub">Admin jump host or bastion, break glass access only.</p>
+      </div>
+      <div class="aab-panel">
+        <p class="aab-panel-title">Full audit trail</p>
+        <p class="aab-panel-sub">SIEM and syslog forwarding, so every action lands in your own SOC.</p>
+      </div>
+      <div class="aab-panel">
+        <p class="aab-panel-title">One way updates</p>
+        <p class="aab-panel-sub">Models and containers arrive through an offline update repository by one way transfer.</p>
+      </div>
+    </div>
+
+    <p class="aab-legend">
+      Your network is the boundary, not your building. Staff in other offices reach the box over
+      site to site VPN or SD WAN, and remote staff over VPN, without anything leaving your network.
+    </p>
+
   </div>
 </section>
+
 
 <!-- ══ PRICING ══ -->
 <section class="band">
