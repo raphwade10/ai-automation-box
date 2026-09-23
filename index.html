@@ -172,9 +172,53 @@ svg{display:block}
   border-radius:50%;background:var(--blue-bright)}
 .plan--feat li::before{background:#fff}
 
+.lead-time{margin-top:24px;text-align:center;font-size:.95rem;color:var(--ink);font-weight:500}
+.band--blue .lead-time,.band--bright .lead-time{color:#fff}
 .note{font-size:.84rem;color:var(--muted);margin-top:22px;text-align:center;
   max-width:62rem;margin-inline:auto;line-height:1.65}
 .band--blue .note,.band--bright .note{color:var(--on-blue-mute)}
+
+/* ── architecture (slide 11) — all selectors namespaced .aab- ───────── */
+.aab-arch{
+  --aab-blue:var(--blue-bright); --aab-blue-deep:var(--blue);
+  --aab-blue-soft:#EAF2FE; --aab-blue-line:var(--line);
+  --aab-ink:var(--ink); --aab-muted:var(--muted);
+  --aab-bg:var(--grey); --aab-card:var(--paper); --aab-block:#C0392B;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .aab-arch{
+  --aab-blue-soft:#10243E; --aab-block:#E0705F;}}
+:root[data-theme="dark"] .aab-arch{--aab-blue-soft:#10243E; --aab-block:#E0705F}
+.aab-arch{background:var(--aab-bg)}
+.aab-diagram{display:grid;gap:14px}
+.aab-zone{border:1px solid var(--aab-blue-line);border-radius:var(--radius);
+  padding:20px;background:var(--aab-card)}
+.aab-zone--iso{border:2px solid var(--aab-blue);background:var(--aab-blue-soft)}
+.aab-zone--blocked{border-style:dashed;border-color:var(--aab-block);
+  background:transparent;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.aab-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--aab-muted);margin-bottom:14px}
+.aab-zone--iso .aab-label{color:var(--aab-blue)}
+.aab-zone--blocked .aab-label{margin:0;color:var(--aab-block)}
+.aab-blocked-note{font-size:.9rem;color:var(--aab-block);font-weight:600;margin:0}
+.aab-x{width:24px;height:24px;flex:none;color:var(--aab-block)}
+.aab-nodes{display:grid;gap:10px;grid-template-columns:repeat(4,1fr)}
+.aab-node{background:var(--aab-card);border:1px solid var(--aab-blue-line);
+  border-radius:var(--radius-btn);padding:12px 14px;font-size:.88rem;font-weight:600;
+  color:var(--aab-ink);line-height:1.4}
+.aab-node span{display:block;font-weight:400;color:var(--aab-muted);font-size:.8rem;margin-top:3px}
+.aab-zone--iso .aab-node{border-color:rgba(0,116,255,.28)}
+.aab-boxname{font-size:1.02rem;font-weight:700;color:var(--aab-ink);margin-bottom:14px}
+.aab-flow{display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--aab-muted)}
+.aab-flow::before,.aab-flow::after{content:"";height:1px;width:38px;background:var(--aab-blue-line)}
+.aab-split{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+.aab-foot{font-size:.86rem;color:var(--aab-muted);text-align:center;margin-top:22px}
+@media(max-width:960px){
+  .aab-nodes{grid-template-columns:repeat(2,1fr)}
+  .aab-split{grid-template-columns:1fr}
+}
+@media(max-width:560px){.aab-nodes{grid-template-columns:1fr}}
 
 /* contact */
 .contact-box{background:var(--grey);border-radius:var(--radius);padding:clamp(26px,3.5vw,44px)}
@@ -369,6 +413,78 @@ footer{border-top:1px solid var(--line);padding-block:26px;font-size:.84rem;
   </div>
 </section>
 
+<!-- ══ ARCHITECTURE ══ -->
+<section class="band aab-arch" id="architecture">
+  <div class="wrap">
+    <div class="head">
+      <h2>How it fits your network</h2>
+      <p>The box is deployed inside your own environment. Nothing it does at inference time
+        reaches the public internet.</p>
+    </div>
+
+    <div class="aab-diagram">
+      <div class="aab-zone aab-zone--blocked">
+        <svg class="aab-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8.5 8.5 7 7M15.5 8.5l-7 7"/></svg>
+        <div>
+          <p class="aab-label">Public internet · SaaS LLM APIs</p>
+          <p class="aab-blocked-note">Blocked. No direct egress from the AI Automation Box.</p>
+        </div>
+      </div>
+
+      <div class="aab-zone">
+        <p class="aab-label">Enterprise users · office LAN</p>
+        <div class="aab-nodes">
+          <div class="aab-node">Requesters</div>
+          <div class="aab-node">Approvers</div>
+          <div class="aab-node">Fulfillers</div>
+          <div class="aab-node">Browser + mobile<span>client access</span></div>
+        </div>
+      </div>
+
+      <p class="aab-flow">HTTPS · LAN</p>
+
+      <div class="aab-zone aab-zone--iso">
+        <p class="aab-label">Isolated zone · air-gap optional</p>
+        <p class="aab-boxname">AI Automation Box · containerised</p>
+        <div class="aab-nodes">
+          <div class="aab-node">Agent Orchestrator</div>
+          <div class="aab-node">Ollama + LLM</div>
+          <div class="aab-node">Vector DB</div>
+          <div class="aab-node">Relational DB</div>
+          <div class="aab-node">Media Generation</div>
+          <div class="aab-node">Editor UI</div>
+          <div class="aab-node">Exec Logging</div>
+          <div class="aab-node">Container Mgmt</div>
+        </div>
+      </div>
+
+      <div class="aab-split">
+        <div class="aab-zone">
+          <p class="aab-label">Integrates with internal systems · no internet required</p>
+          <div class="aab-nodes" style="grid-template-columns:repeat(2,1fr)">
+            <div class="aab-node">AD / LDAP<span>SSO</span></div>
+            <div class="aab-node">Internal<span>SMTP relay</span></div>
+            <div class="aab-node">File shares<span>/ NAS</span></div>
+            <div class="aab-node">Internal<span>APIs &amp; apps</span></div>
+          </div>
+        </div>
+        <div class="aab-zone">
+          <p class="aab-label">Controlled management &amp; updates</p>
+          <div class="aab-nodes" style="grid-template-columns:1fr">
+            <div class="aab-node">Admin jump host / bastion<span>Break-glass access only</span></div>
+            <div class="aab-node">SIEM / syslog forwarding<span>Logs to your enterprise SOC</span></div>
+            <div class="aab-node">Offline update repo<span>Models &amp; containers via one-way transfer</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="aab-foot">Runs on customer hardware. MyRepublic assesses and recommends the hosting
+      location.</p>
+  </div>
+</section>
+
 <!-- ══ PRICING ══ -->
 <section class="band">
   <div class="wrap">
@@ -382,7 +498,9 @@ footer{border-top:1px solid var(--line);padding-block:26px;font-size:.84rem;
         <ul>
           <li>Runs up to 120B-class models</li>
           <li>Chat, agents, image &amp; video generation</li>
+          <li>Free self-paced training videos from the AI Academy</li>
           <li>2-year on-site warranty (HW &amp; SW)</li>
+          <li>Optional cover available from year 3</li>
         </ul>
         <div class="plan__box">
           <small>One-time</small>
@@ -398,7 +516,9 @@ footer{border-top:1px solid var(--line);padding-block:26px;font-size:.84rem;
         <ul>
           <li>Runs up to 405B-class models</li>
           <li>Double capacity and concurrency</li>
+          <li>Free self-paced training videos from the AI Academy</li>
           <li>2-year on-site warranty (HW &amp; SW)</li>
+          <li>Optional cover available from year 3</li>
         </ul>
         <div class="plan__box">
           <small>One-time</small>
@@ -414,7 +534,9 @@ footer{border-top:1px solid var(--line);padding-block:26px;font-size:.84rem;
         <ul>
           <li>Purpose-built for production</li>
           <li>Scaled RAM, NVMe &amp; GPUs</li>
+          <li>Full platform + priority support</li>
           <li>Enterprise SLA</li>
+          <li>Configured on consultation</li>
         </ul>
         <div class="plan__box">
           <small>Pricing</small>
@@ -423,10 +545,13 @@ footer{border-top:1px solid var(--line);padding-block:26px;font-size:.84rem;
         </div>
       </div>
     </div>
+    <p class="lead-time">Basic and Pro ship from stock. Expert rackmount builds carry a typical
+      hardware lead time of 20+ weeks.</p>
     <p class="note">Indicative pricing. Final configuration and pricing confirmed on consultation.
-      No subscriptions, no per-seat fees, unlimited usage. All products and offers are subject to
-      availability. MyRepublic reserves the right to alter product offerings and specifications at
-      any time, without notice.</p>
+      Payment is 50% on signing and 50% on delivery. No subscriptions, no per-seat fees, unlimited
+      usage. Optional cover from year 3 is quoted on consultation. All products and offers are
+      subject to availability. MyRepublic reserves the right to alter product offerings and
+      specifications at any time, without notice.</p>
   </div>
 </section>
 
